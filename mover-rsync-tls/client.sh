@@ -153,7 +153,7 @@ while [[ $rc -ne 0 && $RETRY -lt $MAX_RETRIES ]]; do
         find "${SOURCE}" -mindepth 1 -maxdepth 1 -printf '/%P\n' > /tmp/filelist.txt
         if [[ -s /tmp/filelist.txt ]]; then
             # 1st run preserves as much as possible, but excludes the root directory
-            rsync -aAhHSxz -r --exclude=lost+found --itemize-changes --info=stats2,misc2 --files-from=/tmp/filelist.txt ${SOURCE}/ rsync://127.0.0.1:$STUNNEL_LISTEN_PORT/data
+            rsync -aAhHSxz -o --perms -g -r --exclude=lost+found --itemize-changes --info=stats2,misc2 --files-from=/tmp/filelist.txt ${SOURCE}/ rsync://127.0.0.1:$STUNNEL_LISTEN_PORT/data
         else
             echo "Skipping sync of empty source directory"
         fi
@@ -162,7 +162,7 @@ while [[ $rc -ne 0 && $RETRY -lt $MAX_RETRIES ]]; do
         # To delete extra files, must sync at the directory-level, but need to avoid
         # trying to modify the directory itself. This pass will only delete files
         # that exist on the destination but not on the source, not make updates.
-        rsync -rx --exclude=lost+found --ignore-existing --ignore-non-existing --delete --itemize-changes --info=stats2,misc2 ${SOURCE}/ rsync://127.0.0.1:$STUNNEL_LISTEN_PORT/data
+        rsync -rx -o --perms -g --exclude=lost+found --ignore-existing --ignore-non-existing --delete --itemize-changes --info=stats2,misc2 ${SOURCE}/ rsync://127.0.0.1:$STUNNEL_LISTEN_PORT/data
         rc_b=$?
         rc=$(( rc_a * 100 + rc_b ))
     fi

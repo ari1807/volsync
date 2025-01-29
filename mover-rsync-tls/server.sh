@@ -137,7 +137,7 @@ accept = $STUNNEL_LISTEN_PORT
 client = no
 ; When we get an incoming connection, spawn rsync to handle it
 exec = /usr/bin/rsync
-execargs = rsync --server --daemon --no-g --no-o --no-perms --config=$RSYNCD_CONF .
+execargs = rsync --server --daemon --config=$RSYNCD_CONF .
 STUNNEL_CONF
 
     ##############################
